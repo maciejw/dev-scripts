@@ -3,6 +3,7 @@
 call :download v8 %1
 call :download v10 %1
 call :download v11 %1
+call :download v12 %1
 
 goto:eof
 

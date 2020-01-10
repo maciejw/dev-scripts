@@ -2,8 +2,8 @@
 
 call :download v8 %1
 call :download v10 %1
-call :download v11 %1
 call :download v12 %1
+call :download v13 %1
 
 goto:eof
 
@@ -22,7 +22,9 @@ set url=https://nodejs.org/dist/latest-%version%.x/
 
 echo searching for %url%
 
-for /f delims^=^"^ tokens^=2 %%I in ('curl --silent %url% ^| findstr /R node-.*-win-x64.zip') do set file=%%I
+set curl="C:\Program Files\Git\mingw64\bin\curl.exe"
+
+for /f delims^=^"^ tokens^=2 %%I in ('%curl% --insecure --silent %url% ^| findstr /R node-.*-win-x64.zip') do set file=%%I
 
 call :getfilename filename %file%
 
@@ -30,7 +32,7 @@ if not exist %node_dir%\%filename% (
   echo deleting previous version
   for /d %%I in (%node_dir%\node-%version%*) do rd /q /s %%I 
   echo downloading %file%...
-  curl --silent -o %file% %url%%file%
+  %curl% --insecure --silent -o %file% %url%%file%
   echo extracting...
   unzip -q %file% -d %node_dir%
   del %file%
